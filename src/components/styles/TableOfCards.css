@@ -1,0 +1,15 @@
+.TableOfCards {
+  min-height: 85vh;
+  background-color: rgb(41, 41, 41);
+
+  border-top: 10px solid black;
+  border-bottom: 10px solid black;
+  border-left: 5px solid black;
+  border-right: 5px solid black;
+
+  perspective: 1000px; /* To add depth to the flipping of the ImageCards. It make the flipping look better, more realistic. */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
