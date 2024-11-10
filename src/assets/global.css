@@ -29,6 +29,7 @@ html {
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
   color-scheme: light dark;
+  font-family: "Open Sans", sans-serif;
 }
 
 /* Optimize line-height for headings to enhance title readability */

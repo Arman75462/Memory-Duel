@@ -1,0 +1,41 @@
+.ScoreBoard {
+  z-index: 1000; /* Place the scoreboard on top of the ImageCards */
+  height: max(6em, 10vw);
+  width: max(5em, 10vw);
+  padding-left: max(
+    1.5em,
+    4vw
+  ); /* Make the numbers go more on the right, on hte edge of the right border of the scoreboard component */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  position: absolute; /* Center the scoreboard on the y-axis and place it on the left in hte x-axis */
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+
+  background-color: whitesmoke;
+  color: black;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  font-weight: bolder;
+}
+
+.ScoreBoard__blue-player-score,
+.ScoreBoard__red-player-score {
+  transform: rotate(-90deg);
+  font-size: clamp(1.2rem, 1.5vw, 5rem);
+}
+
+.ScoreBoard__blue-player-score + div {
+  font-size: clamp(0.9rem, 1vw, 5rem);
+}
+
+.ScoreBoard__blue-player-score {
+  color: var(--bluePlayerColor);
+}
+
+.ScoreBoard__red-player-score {
+  color: var(--redPlayerColor);
+}

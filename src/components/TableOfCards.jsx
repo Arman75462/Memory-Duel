@@ -1,5 +1,6 @@
 import "./styles/TableOfCards.css";
-import ImageCard from "./ImageCard";
+import ImageCard from "./ImageCard.jsx";
+import ScoreBoard from "./ScoreBoard.jsx";
 import clockImage from "../assets/card-images/clockImage.webp";
 import dumbbellImage from "../assets/card-images/dumbbellImage.webp";
 import fishImage from "../assets/card-images/fishImage.webp";
@@ -151,6 +152,7 @@ function TableOfCards() {
 
   return (
     <div className="TableOfCards">
+      <ScoreBoard />
       <div className="TableOfCards__ImageCards-container">
         {arrayOfImageCardsData.map((cardObjectData) => (
           <ImageCard

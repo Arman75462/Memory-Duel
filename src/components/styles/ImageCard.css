@@ -4,8 +4,8 @@
   position: relative;
 
   background-color: rgb(226, 181, 0);
-  border: 5px solid rgb(221, 221, 221);
-  border-radius: 0.5em;
+  border: max(0.35em, 0.45vw) solid rgb(221, 221, 221);
+  border-radius: max(0.5em, 0.8vw);
   cursor: pointer;
   transform-style: preserve-3d; /* Make the flipping animation work */
   transition: transform 0.6s;

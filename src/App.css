@@ -1,6 +1,6 @@
 .App {
   height: 100vh;
-  background-color: var(--redPlayerColor);
+  background-color: var(--bluePlayerColor);
 
   /* To center the table of cards */
   display: flex;
