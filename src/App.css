@@ -1,5 +1,5 @@
 .App {
-  min-height: 100vh;
+  height: 100vh;
   background-color: var(--redPlayerColor);
 
   /* To center the table of cards */

@@ -25,4 +25,11 @@
 
 .ImageCard__back {
   transform: rotateY(180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ImageCard__back-image {
+  width: 80%;
 }
