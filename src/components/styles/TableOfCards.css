@@ -14,15 +14,11 @@
 }
 
 .TableOfCards__ImageCards-container {
-  display: grid;
-  /* Assuming each card is roughly 150px wide, adjust as necessary */
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1em;
-  padding: 2em;
-  width: 100%; /* Adjust based on actual width needs */
-  max-width: 960px; /* Maximum width of the container to avoid too large cards */
-  background-color: blue;
-
-  /* Centering the grid itself if it's narrower than its parent */
+  max-width: 900px;
+  display: flex;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: max(15px, 2vw);
+  padding: 1em;
+  /*  background-color: blue; */
 }

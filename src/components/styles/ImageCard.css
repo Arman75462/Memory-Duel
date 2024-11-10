@@ -1,14 +1,14 @@
 .ImageCard {
-  height: 60px;
-  width: 60px;
+  width: max(60px, 5vw);
+  height: max(60px, 5vw);
   position: relative;
-  transform-style: preserve-3d; /* Make the flippign animation work */
-  transition: transform 0.6s;
 
   background-color: rgb(226, 181, 0);
   border: 5px solid rgb(221, 221, 221);
   border-radius: 0.5em;
   cursor: pointer;
+  transform-style: preserve-3d; /* Make the flipping animation work */
+  transition: transform 0.6s;
 }
 
 .ImageCard__front,
