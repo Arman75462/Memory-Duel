@@ -1,158 +1,102 @@
 import "./styles/TableOfCards.css";
+import { useState, useEffect } from "react";
+import arrayOfImageCardsData from "../assets/arrayOfImageCardsData.js";
 import ImageCard from "./ImageCard.jsx";
-import ScoreBoard from "./ScoreBoard.jsx";
-import clockImage from "../assets/card-images/clockImage.webp";
-import dumbbellImage from "../assets/card-images/dumbbellImage.webp";
-import fishImage from "../assets/card-images/fishImage.webp";
-import flowerImage from "../assets/card-images/flowerImage.webp";
-import footballImage from "../assets/card-images/footballImage.webp";
-import ghostImage from "../assets/card-images/ghostImage.webp";
-import ladybugImage from "../assets/card-images/ladybugImage.webp";
-import melonImage from "../assets/card-images/melonImage.webp";
-import ratImage from "../assets/card-images/ratImage.webp";
-import sunImage from "../assets/card-images/sunImage.webp";
-import swordImage from "../assets/card-images/swordImage.webp";
 
 function TableOfCards() {
-  const arrayOfImageCardsData = [
-    {
-      id: 1,
-      cardImageSrc: clockImage,
-      cardImageAlt: "Clock-1",
-      ImageCardBack_BackgroundColor: "#fa8072",
-      /* cardImagePairId: "Clock-1", */
-    },
-    {
-      id: 2,
-      cardImageSrc: dumbbellImage,
-      cardImageAlt: "Dumbbell-1",
-      ImageCardBack_BackgroundColor: "#e14adc",
-    },
-    {
-      id: 3,
-      cardImageSrc: fishImage,
-      cardImageAlt: "Fish-1",
-      ImageCardBack_BackgroundColor: "#40e0d0",
-    },
-    {
-      id: 4,
-      cardImageSrc: flowerImage,
-      cardImageAlt: "Flower-1",
-      ImageCardBack_BackgroundColor: "#4169e1",
-    },
-    {
-      id: 5,
-      cardImageSrc: footballImage,
-      cardImageAlt: "Football-1",
-      ImageCardBack_BackgroundColor: "#38d038",
-    },
-    {
-      id: 6,
-      cardImageSrc: ghostImage,
-      cardImageAlt: "Ghost-1",
-      ImageCardBack_BackgroundColor: "#8b008b",
-    },
-    {
-      id: 7,
-      cardImageSrc: ladybugImage,
-      cardImageAlt: "Ladybug-1",
-      ImageCardBack_BackgroundColor: "#ffff00",
-    },
-    {
-      id: 8,
-      cardImageSrc: melonImage,
-      cardImageAlt: "Melon-1",
-      ImageCardBack_BackgroundColor: "#3e3e7b",
-    },
-    {
-      id: 9,
-      cardImageSrc: ratImage,
-      cardImageAlt: "Rat-1",
-      ImageCardBack_BackgroundColor: "#9f1237",
-    },
-    {
-      id: 10,
-      cardImageSrc: sunImage,
-      cardImageAlt: "Sun-1",
-      ImageCardBack_BackgroundColor: "#007FFF",
-    },
-    {
-      id: 11,
-      cardImageSrc: swordImage,
-      cardImageAlt: "Sword-1",
-      ImageCardBack_BackgroundColor: "#92430a",
-    },
-    {
-      id: 12,
-      cardImageSrc: clockImage,
-      cardImageAlt: "Clock-2",
-      ImageCardBack_BackgroundColor: "#fa8072",
-    },
-    {
-      id: 13,
-      cardImageSrc: dumbbellImage,
-      cardImageAlt: "Dumbbell-2",
-      ImageCardBack_BackgroundColor: "#e14adc",
-    },
-    {
-      id: 14,
-      cardImageSrc: fishImage,
-      cardImageAlt: "Fish-2",
-      ImageCardBack_BackgroundColor: "#40e0d0",
-    },
-    {
-      id: 15,
-      cardImageSrc: flowerImage,
-      cardImageAlt: "Flower-2",
-      ImageCardBack_BackgroundColor: "#4169e1",
-    },
-    {
-      id: 16,
-      cardImageSrc: footballImage,
-      cardImageAlt: "Football-2",
-      ImageCardBack_BackgroundColor: "#38d038",
-    },
-    {
-      id: 17,
-      cardImageSrc: ghostImage,
-      cardImageAlt: "Ghost-2",
-      ImageCardBack_BackgroundColor: "#8b008b",
-    },
-    {
-      id: 18,
-      cardImageSrc: ladybugImage,
-      cardImageAlt: "Ladybug-2",
-      ImageCardBack_BackgroundColor: "#ffff00",
-    },
-    {
-      id: 19,
-      cardImageSrc: melonImage,
-      cardImageAlt: "Melon-2",
-      ImageCardBack_BackgroundColor: "#3e3e7b",
-    },
-    {
-      id: 20,
-      cardImageSrc: ratImage,
-      cardImageAlt: "Rat-2",
-      ImageCardBack_BackgroundColor: "#9f1237",
-    },
-    {
-      id: 21,
-      cardImageSrc: sunImage,
-      cardImageAlt: "Sun-2",
-      ImageCardBack_BackgroundColor: "#007FFF",
-    },
-    {
-      id: 22,
-      cardImageSrc: swordImage,
-      cardImageAlt: "Sword-2",
-      ImageCardBack_BackgroundColor: "#92430a",
-    },
-  ];
+  const [isFirstCardSelected, setIsFirstCardSelected] = useState(true);
+  const [clickedCard1Id, setClickedCard1Id] = useState(null);
+  const [clickedCard2Id, setClickedCard2Id] = useState(null);
+  // Don't remove these default values, or else the compareImageCards function will directly run (because these two states below would have the same values)
+  const [clickedCard1MatchId, setClickedCard1MatchId] = useState("MatchId 1");
+  const [clickedCard2MatchId, setClickedCard2MatchId] = useState("MatchId 2");
+
+  // Run compareImageCards() each time a card has been clicked
+  useEffect(() => {
+    compareImageCards();
+  }, [isFirstCardSelected]); // Dependencies on both card IDs
+
+  function compareImageCards() {
+    // Execute if the cards' matchIds (clickedCard1MatchId and clickedCard2MatchId) are the same
+    if (clickedCard1MatchId === clickedCard2MatchId) {
+      // Increase the points of whoevers turn it was
+
+      // Make the cards disappear
+      makeCardDisappear(clickedCard1Id);
+      makeCardDisappear(clickedCard2Id);
+
+      resetCardsIdAndMatchId();
+
+      // Execute if the cards have non-null IDs and their matchIds aren't the same
+    } else if (
+      clickedCard1MatchId !== clickedCard2MatchId &&
+      clickedCard1Id &&
+      clickedCard2Id
+    ) {
+      resetCardsIdAndMatchId();
+
+      // Flip back the cards when the cards' matchIds (clickedCard1MatchId and clickedCard2MatchId) aren't the same
+      flipCardBack(clickedCard1Id);
+      flipCardBack(clickedCard2Id);
+    }
+  }
+
+  function storeTheIdOfClickedCards(event) {
+    // Gets the id of the clicked card
+    const clickedCardId = arrayOfImageCardsData[event.target.id - 1].id;
+
+    // Gets the matchId of the clicked card
+    const clickedCardMatchId =
+      arrayOfImageCardsData[event.target.id - 1].matchId;
+
+    // Determine if this is the turn to select the first card. If true, store the ID of the clicked card as the first selected card; otherwise, store it as the second selected card.
+    if (isFirstCardSelected) {
+      setClickedCard1MatchId(clickedCardMatchId);
+      setClickedCard1Id(clickedCardId);
+    } else {
+      setClickedCard2MatchId(clickedCardMatchId);
+      setClickedCard2Id(clickedCardId);
+    }
+
+    flipCard(clickedCardId); // Initiate the card flip to reveal the back image whenever a card is clicked
+
+    setIsFirstCardSelected(!isFirstCardSelected); // Toggle the turn for next card
+  }
+
+  // Flip the card to show its back image
+  function flipCard(id) {
+    const cardToFlip = document.getElementById(id);
+    cardToFlip.style.transform = "rotateY(180deg)";
+  }
+
+  // Flip the card to hide its back image
+  function flipCardBack(id) {
+    // Wait 1.5 second before making card flip back
+    setTimeout(() => {
+      const cardToFlip = document.getElementById(id);
+      cardToFlip.style.transform = "rotateY(0deg)";
+    }, 1500);
+  }
+
+  // Make the card disappear
+  function makeCardDisappear(id) {
+    // Wait 1 second before making card disappear
+    setTimeout(() => {
+      const cardToDisappear = document.getElementById(id);
+      cardToDisappear.style.animation = "disappearSmoothly 1.25s forwards";
+    }, 1000);
+  }
+
+  // Reset the id and matchId of clickedCard1 and clickedCard2
+  function resetCardsIdAndMatchId() {
+    setClickedCard1MatchId("MatchId 1");
+    setClickedCard2MatchId("MatchId 2");
+    setClickedCard1Id(null);
+    setClickedCard2Id(null);
+  }
 
   return (
     <div className="TableOfCards">
-      <ScoreBoard />
       <div className="TableOfCards__ImageCards-container">
         {arrayOfImageCardsData.map((cardObjectData) => (
           <ImageCard
@@ -163,6 +107,7 @@ function TableOfCards() {
             ImageCardBack_BackgroundColor={
               cardObjectData.ImageCardBack_BackgroundColor
             }
+            onClick={storeTheIdOfClickedCards}
           />
         ))}
       </div>

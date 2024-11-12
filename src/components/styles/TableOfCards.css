@@ -14,10 +14,10 @@
 }
 
 .TableOfCards__ImageCards-container {
-  max-width: 900px;
+  width: 90%;
+  max-width: 700px;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: max(15px, 2vw);
-  padding: 1em;
 }

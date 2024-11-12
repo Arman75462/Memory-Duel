@@ -5,20 +5,13 @@ function ImageCard({
   cardImageSrc,
   cardImageAlt,
   ImageCardBack_BackgroundColor,
+  onClick,
 }) {
-  function flipCard() {
-    const cardToFlip = document.getElementById(id);
-    cardToFlip.style.transform = "rotateY(180deg)";
-
-    // Wait before flipping back the cardToFlip
-    setTimeout(() => {
-      cardToFlip.style.transform = "rotateY(0deg)";
-    }, 1500);
-  }
-
   return (
-    <div className="ImageCard" id={id} onClick={flipCard}>
-      <div className="ImageCard__front"></div>
+    <div className="ImageCard" id={id} onClick={onClick}>
+      <div className="ImageCard__front" id={id}>
+        {/* The 'id' is also assigned to ImageCard__front to ensure that the flipping action is triggered from anywhere on the card, not just the borders. Without passing the id to ImageCard__front, clicking on the center part of the card, which corresponds to ImageCard__front, wouldn't activate the flip. */}
+      </div>
       <div
         className="ImageCard__back"
         style={{ backgroundColor: ImageCardBack_BackgroundColor }}
