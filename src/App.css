@@ -1,9 +1,9 @@
 .App {
   height: 100vh;
-  background-color: var(--bluePlayerColor);
-
   /* To center the table of cards */
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  transition: background-color 0.75s; /* This will smoothly transition the background colors between the red and blue background colors */
 }

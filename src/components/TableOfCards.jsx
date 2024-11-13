@@ -1,9 +1,18 @@
 import "./styles/TableOfCards.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import arrayOfImageCardsData from "../assets/arrayOfImageCardsData.js";
 import ImageCard from "./ImageCard.jsx";
+import ScoreAndTurnContext from "../contexts/ScoreAndTurnContext.jsx";
 
 function TableOfCards() {
+  const {
+    bluePlayerTurn,
+    setBluePlayerTurn,
+    setBluePlayerScore,
+    setRedPlayerScore,
+  } = useContext(ScoreAndTurnContext);
+
+  // State to know if the first card has been selected. This state is important for the second card logic.
   const [isFirstCardSelected, setIsFirstCardSelected] = useState(true);
   const [clickedCard1Id, setClickedCard1Id] = useState(null);
   const [clickedCard2Id, setClickedCard2Id] = useState(null);
@@ -16,10 +25,16 @@ function TableOfCards() {
     compareImageCards();
   }, [isFirstCardSelected]); // Dependencies on both card IDs
 
+  // Function to compare whether the clicked cards' images match or not. Based on this result, various other things will occur (cards disappears, cards flip back, reset card Ids, give point to player, etc.)
   function compareImageCards() {
     // Execute if the cards' matchIds (clickedCard1MatchId and clickedCard2MatchId) are the same
     if (clickedCard1MatchId === clickedCard2MatchId) {
       // Increase the points of whoevers turn it was
+      if (bluePlayerTurn) {
+        setBluePlayerScore((prevBluePlayerScore) => prevBluePlayerScore + 1);
+      } else {
+        setRedPlayerScore((prevRedPlayerScore) => prevRedPlayerScore + 1);
+      }
 
       // Make the cards disappear
       makeCardDisappear(clickedCard1Id);
@@ -35,12 +50,19 @@ function TableOfCards() {
     ) {
       resetCardsIdAndMatchId();
 
-      // Flip back the cards when the cards' matchIds (clickedCard1MatchId and clickedCard2MatchId) aren't the same
+      // Flip back the cards
       flipCardBack(clickedCard1Id);
       flipCardBack(clickedCard2Id);
+
+      // Timeout function to wait for the cards to flip back
+      setTimeout(() => {
+        // Change the player's turn
+        setBluePlayerTurn((prevBluePlayerTurn) => !prevBluePlayerTurn);
+      }, 1500);
     }
   }
 
+  // This function stores the matchId of the clicked cards in their respective state To be able to use the compareImageCards() function.
   function storeTheIdOfClickedCards(event) {
     // Gets the id of the clicked card
     const clickedCardId = arrayOfImageCardsData[event.target.id - 1].id;
