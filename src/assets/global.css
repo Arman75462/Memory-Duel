@@ -101,8 +101,8 @@ a {
 GENERAL STYLES================
 ==============================*/
 :root {
-  --redPlayerColor: rgba(255, 8, 0, 0.844);
-  --bluePlayerColor: rgba(0, 89, 255, 0.8);
+  --redPlayerColor: #ff0800;
+  --bluePlayerColor: #0059ff;
 }
 
 /*============================
@@ -116,5 +116,16 @@ ANIMATIONS====================
   to {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+@keyframes appearSmoothly {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
   }
 }

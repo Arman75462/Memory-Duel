@@ -1,5 +1,5 @@
 .ScoreBoard {
-  z-index: 1000; /* Place the scoreboard on top of the ImageCards */
+  z-index: 10; /* Place the scoreboard on top of the ImageCards */
   height: max(6em, 10vw);
   width: max(5em, 10vw);
   padding-left: max(

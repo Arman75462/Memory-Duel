@@ -1,0 +1,14 @@
+.GameEndedBackground {
+  inset: 0;
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0.95;
+  color: whitesmoke;
+  font-weight: bolder;
+  font-size: clamp(3rem, 8vw, 8rem);
+  animation: appearSmoothly 1s;
+}

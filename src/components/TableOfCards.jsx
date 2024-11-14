@@ -3,11 +3,15 @@ import { useState, useEffect, useContext } from "react";
 import arrayOfImageCardsData from "../assets/arrayOfImageCardsData.js";
 import ImageCard from "./ImageCard.jsx";
 import ScoreAndTurnContext from "../contexts/ScoreAndTurnContext.jsx";
+import GameEndedBackground from "./GameEndedBackground.jsx";
+import { shuffleArray } from "../utils.js";
 
 function TableOfCards() {
   const {
     bluePlayerTurn,
     setBluePlayerTurn,
+    bluePlayerScore,
+    redPlayerScore,
     setBluePlayerScore,
     setRedPlayerScore,
   } = useContext(ScoreAndTurnContext);
@@ -19,11 +23,23 @@ function TableOfCards() {
   // Don't remove these default values, or else the compareImageCards function will directly run (because these two states below would have the same values)
   const [clickedCard1MatchId, setClickedCard1MatchId] = useState("MatchId 1");
   const [clickedCard2MatchId, setClickedCard2MatchId] = useState("MatchId 2");
+  const [gameEnded, setGameEnded] = useState(false);
+  const [shuffledCards, setShuffledCards] = useState([]); // Store the shuffled cards from arrayOfImageCardsData
+
+  // Shuffles the arrayOfImageCardsData each time the game ends
+  useEffect(() => {
+    setShuffledCards(shuffleArray([...arrayOfImageCardsData]));
+  }, [gameEnded]);
 
   // Run compareImageCards() each time a card has been clicked
   useEffect(() => {
     compareImageCards();
-  }, [isFirstCardSelected]); // Dependencies on both card IDs
+  }, [isFirstCardSelected]);
+
+  // Run whenever bluePlayerScore or redPlayerScore changes
+  useEffect(() => {
+    verifyIfGameEnded();
+  }, [bluePlayerScore, redPlayerScore]);
 
   // Function to compare whether the clicked cards' images match or not. Based on this result, various other things will occur (cards disappears, cards flip back, reset card Ids, give point to player, etc.)
   function compareImageCards() {
@@ -62,14 +78,33 @@ function TableOfCards() {
     }
   }
 
+  function verifyIfGameEnded() {
+    // If all cards have been clicked
+    if (bluePlayerScore + redPlayerScore === shuffledCards.length / 2) {
+      // Reset blue player score and red player score to 0
+      setBluePlayerScore(0);
+      setRedPlayerScore(0);
+
+      // Set gameEnded to true (display <GameEndedBackground /> component)
+      setGameEnded((prevValue) => !prevValue);
+
+      // Wait 3 seconds setting gameEnded state to false (basicaly, waits 3 seconds before removing the <GameEndedBackground /> component)
+      setTimeout(() => {
+        setGameEnded(false);
+      }, 3000);
+    }
+  }
+
   // This function stores the matchId of the clicked cards in their respective state To be able to use the compareImageCards() function.
   function storeTheIdOfClickedCards(event) {
-    // Gets the id of the clicked card
-    const clickedCardId = arrayOfImageCardsData[event.target.id - 1].id;
+    // Gets the id of the clicked card and converts it to a number, because the find method just under uses strict equality in the find function
+    const clickedCardId = parseInt(event.currentTarget.id, 10);
+
+    // Gets the data object of the clickedCard
+    const cardData = shuffledCards.find((card) => card.id === clickedCardId);
 
     // Gets the matchId of the clicked card
-    const clickedCardMatchId =
-      arrayOfImageCardsData[event.target.id - 1].matchId;
+    const clickedCardMatchId = cardData.matchId;
 
     // Determine if this is the turn to select the first card. If true, store the ID of the clicked card as the first selected card; otherwise, store it as the second selected card.
     if (isFirstCardSelected) {
@@ -88,7 +123,9 @@ function TableOfCards() {
   // Flip the card to show its back image
   function flipCard(id) {
     const cardToFlip = document.getElementById(id);
-    cardToFlip.style.transform = "rotateY(180deg)";
+    // Rotate, translate in 3D space, scale up slightly, and intensify the shadow
+    cardToFlip.style.transform = "rotateY(180deg) translateZ(50px) scale(1.1)";
+    cardToFlip.style.boxShadow = "0 0.5vw 1vw rgba(255, 255, 255, 0.7)"; // More pronounced white shadow when flipped
   }
 
   // Flip the card to hide its back image
@@ -96,7 +133,9 @@ function TableOfCards() {
     // Wait 1.5 second before making card flip back
     setTimeout(() => {
       const cardToFlip = document.getElementById(id);
-      cardToFlip.style.transform = "rotateY(0deg)";
+      // Rotate back to initial position, reset translation, scale, and shadow
+      cardToFlip.style.transform = "rotateY(0deg) translateZ(0px) scale(1)";
+      cardToFlip.style.boxShadow = "0 0.2vw 0.4vw rgba(255, 255, 255, 0.4)"; // Reset to default subtle responsive shadow
     }, 1500);
   }
 
@@ -118,22 +157,30 @@ function TableOfCards() {
   }
 
   return (
-    <div className="TableOfCards">
-      <div className="TableOfCards__ImageCards-container">
-        {arrayOfImageCardsData.map((cardObjectData) => (
-          <ImageCard
-            key={cardObjectData.id}
-            id={cardObjectData.id}
-            cardImageSrc={cardObjectData.cardImageSrc}
-            cardImageAlt={cardObjectData.cardImageAlt}
-            ImageCardBack_BackgroundColor={
-              cardObjectData.ImageCardBack_BackgroundColor
-            }
-            onClick={storeTheIdOfClickedCards}
-          />
-        ))}
+    <>
+      {/* Display the GameEndedBackground if the game has ended */}
+      {gameEnded ? <GameEndedBackground /> : null}
+
+      <div className="TableOfCards">
+        <div className="TableOfCards__ImageCards-container">
+          {/* If the game hasnt ended, display cards. IF the game has ended, dont display them. This conditional is placed to rerender the cards once the game has ended */}
+          {gameEnded
+            ? null
+            : shuffledCards.map((cardObjectData) => (
+                <ImageCard
+                  key={cardObjectData.id}
+                  id={cardObjectData.id}
+                  cardImageSrc={cardObjectData.cardImageSrc}
+                  cardImageAlt={cardObjectData.cardImageAlt}
+                  ImageCardBack_BackgroundColor={
+                    cardObjectData.ImageCardBack_BackgroundColor
+                  }
+                  onClick={storeTheIdOfClickedCards}
+                />
+              ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
