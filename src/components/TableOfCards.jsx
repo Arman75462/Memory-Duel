@@ -18,8 +18,8 @@ function TableOfCards() {
 
   // State to know if the first card has been selected. This state is important for the second card logic.
   const [isFirstCardSelected, setIsFirstCardSelected] = useState(true);
-  const [clickedCard1Id, setClickedCard1Id] = useState(null);
-  const [clickedCard2Id, setClickedCard2Id] = useState(null);
+  const [clickedCard1Id, setClickedCard1Id] = useState();
+  const [clickedCard2Id, setClickedCard2Id] = useState();
   // Don't remove these default values, or else the compareImageCards function will directly run (because these two states below would have the same values)
   const [clickedCard1MatchId, setClickedCard1MatchId] = useState("MatchId 1");
   const [clickedCard2MatchId, setClickedCard2MatchId] = useState("MatchId 2");
@@ -88,7 +88,7 @@ function TableOfCards() {
       // Set gameEnded to true (display <GameEndedBackground /> component)
       setGameEnded((prevValue) => !prevValue);
 
-      // Wait 3 seconds setting gameEnded state to false (basicaly, waits 3 seconds before removing the <GameEndedBackground /> component)
+      // Wait 3 seconds before setting gameEnded state to false (basically, waits 3 seconds before removing the <GameEndedBackground /> component and rerendering the cards for next round once the component appears)
       setTimeout(() => {
         setGameEnded(false);
       }, 3000);
@@ -144,7 +144,7 @@ function TableOfCards() {
     // Wait 1 second before making card disappear
     setTimeout(() => {
       const cardToDisappear = document.getElementById(id);
-      cardToDisappear.style.animation = "disappearSmoothly 1.25s forwards";
+      cardToDisappear.style.animation = "disappearCardsSmoothly 1.25s forwards";
     }, 1000);
   }
 
@@ -162,23 +162,23 @@ function TableOfCards() {
       {gameEnded ? <GameEndedBackground /> : null}
 
       <div className="TableOfCards">
-        <div className="TableOfCards__ImageCards-container">
-          {/* If the game hasnt ended, display cards. IF the game has ended, dont display them. This conditional is placed to rerender the cards once the game has ended */}
-          {gameEnded
-            ? null
-            : shuffledCards.map((cardObjectData) => (
-                <ImageCard
-                  key={cardObjectData.id}
-                  id={cardObjectData.id}
-                  cardImageSrc={cardObjectData.cardImageSrc}
-                  cardImageAlt={cardObjectData.cardImageAlt}
-                  ImageCardBack_BackgroundColor={
-                    cardObjectData.ImageCardBack_BackgroundColor
-                  }
-                  onClick={storeTheIdOfClickedCards}
-                />
-              ))}
-        </div>
+        {gameEnded ? null : (
+          <div className="TableOfCards__ImageCards-container">
+            {/* If the game hasnt ended, display cards. If the game has ended, dont display them. This conditional is placed to rerender the cards once the game has ended */}
+            {shuffledCards.map((cardObjectData) => (
+              <ImageCard
+                key={cardObjectData.id}
+                id={cardObjectData.id}
+                cardImageSrc={cardObjectData.cardImageSrc}
+                cardImageAlt={cardObjectData.cardImageAlt}
+                ImageCardBack_BackgroundColor={
+                  cardObjectData.ImageCardBack_BackgroundColor
+                }
+                onClick={storeTheIdOfClickedCards}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

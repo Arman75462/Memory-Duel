@@ -108,7 +108,7 @@ GENERAL STYLES================
 /*============================
 ANIMATIONS====================
 ==============================*/
-@keyframes disappearSmoothly {
+@keyframes disappearCardsSmoothly {
   from {
     opacity: 1;
     visibility: visible;
@@ -119,13 +119,29 @@ ANIMATIONS====================
   }
 }
 
-@keyframes appearSmoothly {
-  from {
+@keyframes appearAndDisappearSmoothlyGameEndedBackground {
+  0% {
     opacity: 0;
     visibility: hidden;
   }
-  to {
+  50% {
     opacity: 1;
     visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes appearImageCardsContainer {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
   }
 }

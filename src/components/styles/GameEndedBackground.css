@@ -10,5 +10,5 @@
   color: whitesmoke;
   font-weight: bolder;
   font-size: clamp(3rem, 8vw, 8rem);
-  animation: appearSmoothly 1s;
+  animation: appearAndDisappearSmoothlyGameEndedBackground 3.5s;
 }
