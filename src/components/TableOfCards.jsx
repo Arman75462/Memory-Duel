@@ -27,7 +27,7 @@ function TableOfCards() {
   // Don't remove these default values, or else the compareImageCards function will directly run (because these two states below would have the same values)
   const [clickedCard1MatchId, setClickedCard1MatchId] = useState("MatchId 1");
   const [clickedCard2MatchId, setClickedCard2MatchId] = useState("MatchId 2");
-  const [gameEnded, setGameEnded] = useState(false);
+  const [gameEnded, setGameEnded] = useState(true);
   const [shuffledCards, setShuffledCards] = useState([]); // Store the shuffled cards from arrayOfImageCardsData
 
   // Shuffles the arrayOfImageCardsData each time the game ends
