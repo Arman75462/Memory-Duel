@@ -7,3 +7,9 @@ export function shuffleArray(array) {
   }
   return shuffledArray;
 }
+
+// Create an audio element and play it by passing the mp3 file as playSound's argument
+export function playSound(sound) {
+  const audio = new Audio(sound);
+  audio.play();
+}

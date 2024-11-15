@@ -5,6 +5,10 @@ import ImageCard from "./ImageCard.jsx";
 import ScoreAndTurnContext from "../contexts/ScoreAndTurnContext.jsx";
 import GameEndedBackground from "./GameEndedBackground.jsx";
 import { shuffleArray } from "../utils.js";
+import flipCardBackSound from "../assets/audioFiles/flipCardBackSound.mp3";
+import flipCardSound from "../assets/audioFiles/flipCardSound.mp3";
+import earnPointSound from "../assets/audioFiles/earnPointSound.mp3";
+import { playSound } from "../utils.js";
 
 function TableOfCards() {
   const {
@@ -55,6 +59,8 @@ function TableOfCards() {
       // Make the cards disappear
       makeCardDisappear(clickedCard1Id);
       makeCardDisappear(clickedCard2Id);
+
+      playSound(earnPointSound);
 
       resetCardsIdAndMatchId();
 
@@ -126,6 +132,9 @@ function TableOfCards() {
     // Rotate, translate in 3D space, scale up slightly, and intensify the shadow
     cardToFlip.style.transform = "rotateY(180deg) translateZ(50px) scale(1.1)";
     cardToFlip.style.boxShadow = "0 0.5vw 1vw rgba(255, 255, 255, 0.7)"; // More pronounced white shadow when flipped
+
+    // Play sound each time a card gets clicked
+    playSound(flipCardSound);
   }
 
   // Flip the card to hide its back image
@@ -133,9 +142,12 @@ function TableOfCards() {
     // Wait 1.5 second before making card flip back
     setTimeout(() => {
       const cardToFlip = document.getElementById(id);
+
       // Rotate back to initial position, reset translation, scale, and shadow
       cardToFlip.style.transform = "rotateY(0deg) translateZ(0px) scale(1)";
       cardToFlip.style.boxShadow = "0 0.2vw 0.4vw rgba(255, 255, 255, 0.4)"; // Reset to default subtle responsive shadow
+
+      playSound(flipCardBackSound);
     }, 1500);
   }
 
