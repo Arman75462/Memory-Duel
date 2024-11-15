@@ -1,5 +1,5 @@
 .TableOfCards {
-  height: 85vh;
+  height: 85dvh;
 
   display: flex; /* To center the ImageCards-container */
   justify-content: center;

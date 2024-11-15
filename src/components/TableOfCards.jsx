@@ -168,6 +168,8 @@ function TableOfCards() {
     setClickedCard2Id(null);
   }
 
+  console.log(gameEnded);
+
   return (
     <>
       {/* Display the GameEndedBackground if the game has ended */}
