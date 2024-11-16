@@ -86,7 +86,7 @@ function TableOfCards() {
 
   function verifyIfGameEnded() {
     // If all cards have been clicked
-    if (bluePlayerScore + redPlayerScore === shuffledCards.length / 2) {
+    if (bluePlayerScore + redPlayerScore === arrayOfImageCardsData.length / 2) {
       // Reset blue player score and red player score to 0
       setBluePlayerScore(0);
       setRedPlayerScore(0);
@@ -167,8 +167,6 @@ function TableOfCards() {
     setClickedCard1Id(null);
     setClickedCard2Id(null);
   }
-
-  console.log(gameEnded);
 
   return (
     <>
