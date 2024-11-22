@@ -1,5 +1,5 @@
 import "./styles/TableOfCards.css";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import arrayOfImageCardsData from "../assets/arrayOfImageCardsData.js";
 import ImageCard from "./ImageCard.jsx";
 import ScoreAndTurnContext from "../contexts/ScoreAndTurnContext.jsx";
@@ -19,6 +19,8 @@ function TableOfCards() {
     setBluePlayerScore,
     setRedPlayerScore,
   } = useContext(ScoreAndTurnContext);
+
+  const cardsRefs = useRef([]); // Array of refs that stores each ImageCard object
 
   // State to know if the first card has been selected. This state is important for the second card logic.
   const [isFirstCardSelected, setIsFirstCardSelected] = useState(true);
@@ -101,7 +103,7 @@ function TableOfCards() {
     }
   }
 
-  // This function stores the matchId of the clicked cards in their respective state To be able to use the compareImageCards() function.
+  // This function stores the matchId of the clicked cards in their respective state to be able to use the compareImageCards() function.
   function storeTheIdOfClickedCards(event) {
     // Gets the id of the clicked card and converts it to a number, because the find method just under uses strict equality in the find function
     const clickedCardId = parseInt(event.currentTarget.id, 10);
@@ -128,7 +130,7 @@ function TableOfCards() {
 
   // Flip the card to show its back image
   function flipCard(id) {
-    const cardToFlip = document.getElementById(id);
+    const cardToFlip = cardsRefs.current[id];
     // Rotate, translate in 3D space, scale up slightly, and intensify the shadow
     cardToFlip.style.transform = "rotateY(180deg) translateZ(50px) scale(1.1)";
     cardToFlip.style.boxShadow = "0 0.5vw 1vw rgba(255, 255, 255, 0.7)"; // More pronounced white shadow when flipped
@@ -141,11 +143,10 @@ function TableOfCards() {
   function flipCardBack(id) {
     // Wait 1.5 second before making card flip back
     setTimeout(() => {
-      const cardToFlip = document.getElementById(id);
-
+      const cardToFlipBack = cardsRefs.current[id];
       // Rotate back to initial position, reset translation, scale, and shadow
-      cardToFlip.style.transform = "rotateY(0deg) translateZ(0px) scale(1)";
-      cardToFlip.style.boxShadow = "0 0.2vw 0.4vw rgba(255, 255, 255, 0.4)"; // Reset to default subtle responsive shadow
+      cardToFlipBack.style.transform = "rotateY(0deg) translateZ(0px) scale(1)";
+      cardToFlipBack.style.boxShadow = "0 0.2vw 0.4vw rgba(255, 255, 255, 0.4)"; // Reset to default subtle responsive shadow
 
       playSound(flipCardBackSound);
     }, 1500);
@@ -155,7 +156,7 @@ function TableOfCards() {
   function makeCardDisappear(id) {
     // Wait 1 second before making card disappear
     setTimeout(() => {
-      const cardToDisappear = document.getElementById(id);
+      const cardToDisappear = cardsRefs.current[id];
       cardToDisappear.style.animation = "disappearCardsSmoothly 1.25s forwards";
     }, 1000);
   }
@@ -180,6 +181,7 @@ function TableOfCards() {
             {shuffledCards.map((cardObjectData) => (
               <ImageCard
                 key={cardObjectData.id}
+                ref={(el) => (cardsRefs.current[cardObjectData.id] = el)} // Assign ref using card ID
                 id={cardObjectData.id}
                 cardImageSrc={cardObjectData.cardImageSrc}
                 cardImageAlt={cardObjectData.cardImageAlt}
