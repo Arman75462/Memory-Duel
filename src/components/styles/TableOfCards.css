@@ -25,3 +25,13 @@
   /* Careful here with changing the animation timing or 'forwards'. This animation is highly dependant on the timing of the animation set on GameEndedBackground component. This animation is also dependant on the setTimout time set in the TableOfCards component, inside the verifyIfGameEnded() function that sets gameEnded state to false. */
   animation: appearImageCardsContainer 1.5s ease-in-out forwards;
 }
+
+/* For each even image-positioned ImageCard inside of its container, rotate it -4deg */
+.TableOfCards__ImageCards-container > .ImageCard:nth-child(even) {
+  transform: rotate(-4deg);
+}
+
+/* For each odd image-positioned ImageCard inside of its container, rotate it 7deg */
+.TableOfCards__ImageCards-container > .ImageCard:nth-child(odd) {
+  transform: rotate(7deg);
+}

@@ -49,8 +49,11 @@ function TableOfCards() {
 
   // Function to compare whether the clicked cards' images match or not. Based on this result, various other things will occur (cards disappears, cards flip back, reset card Ids, give point to player, etc.)
   function compareImageCards() {
-    // Execute if the cards' matchIds (clickedCard1MatchId and clickedCard2MatchId) are the same
-    if (clickedCard1MatchId === clickedCard2MatchId) {
+    // Execute if the cards' matchIds (clickedCard1MatchId and clickedCard2MatchId) are the same and make sure the cards being compared is not the same one by comparing IDs (clickedCard1Id and clickedCard2Id)
+    if (
+      clickedCard1MatchId === clickedCard2MatchId &&
+      clickedCard1Id !== clickedCard2Id
+    ) {
       // Increase the points of whoevers turn it was
       if (bluePlayerTurn) {
         setBluePlayerScore((prevBluePlayerScore) => prevBluePlayerScore + 1);
@@ -132,7 +135,14 @@ function TableOfCards() {
   function flipCard(id) {
     const cardToFlip = cardsRefs.current[id];
     // Rotate, translate in 3D space, scale up slightly, and intensify the shadow
-    cardToFlip.style.transform = "rotateY(180deg) translateZ(50px) scale(1.1)";
+    if (id % 2 === 0) {
+      cardToFlip.style.transform = cardToFlip.style.transform =
+        "rotate(-4deg) rotateY(180deg) translateZ(50px) scale(1.1)";
+    } else {
+      cardToFlip.style.transform = cardToFlip.style.transform =
+        "rotate(7deg) rotateY(180deg) translateZ(50px) scale(1.1)";
+    }
+
     cardToFlip.style.boxShadow = "0 0.5vw 1vw rgba(255, 255, 255, 0.7)"; // More pronounced white shadow when flipped
 
     // Play sound each time a card gets clicked
@@ -145,7 +155,15 @@ function TableOfCards() {
     setTimeout(() => {
       const cardToFlipBack = cardsRefs.current[id];
       // Rotate back to initial position, reset translation, scale, and shadow
-      cardToFlipBack.style.transform = "rotateY(0deg) translateZ(0px) scale(1)";
+
+      if (id % 2 === 0) {
+        cardToFlipBack.style.transform =
+          "rotate(-4deg) rotateY(0deg) translateZ(0px) scale(1)";
+      } else {
+        cardToFlipBack.style.transform =
+          "rotate(7deg) rotateY(0deg) translateZ(0px) scale(1)";
+      }
+
       cardToFlipBack.style.boxShadow = "0 0.2vw 0.4vw rgba(255, 255, 255, 0.4)"; // Reset to default subtle responsive shadow
 
       playSound(flipCardBackSound);
